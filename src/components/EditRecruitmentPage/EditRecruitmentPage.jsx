@@ -24,7 +24,9 @@ function EditRecruitmentPage() {
   useEffect(() => {
     const fetchClubInfo = async () => {
       try {
-        const clubResponse = await axios.get(`${API_BASE_URL}/clubs/${club_id}`);
+        const clubResponse = await axios.get(
+          `${API_BASE_URL}/clubs/${club_id}`
+        );
         setClubName(clubResponse.data.club_name || "동아리 이름");
 
         const recruitmentResponse = await axios.get(API_URL);
@@ -49,8 +51,15 @@ function EditRecruitmentPage() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || (!startDate && type === "수시모집") || (!endDate && type === "수시모집")) {
-      setError("제목, 모집 내용, 시작일(수시모집), 종료일(수시모집)은 필수 입력 사항입니다.");
+    if (
+      !title ||
+      !description ||
+      (!startDate && type === "수시모집") ||
+      (!endDate && type === "수시모집")
+    ) {
+      setError(
+        "제목, 모집 내용, 시작일(수시모집), 종료일(수시모집)은 필수 입력 사항입니다."
+      );
       return;
     }
 
@@ -59,13 +68,18 @@ function EditRecruitmentPage() {
       recruitment_type: type,
       recruitment_phone_number: phoneNumber || null,
       recruitment_email: email || null,
-      recruitment_start_date: type === "상시모집" ? new Date().toISOString().split("T")[0] : startDate,
+      recruitment_start_date:
+        type === "상시모집"
+          ? new Date().toISOString().split("T")[0]
+          : startDate,
       recruitment_end_date: type === "상시모집" ? "2099-12-31" : endDate,
       recruitment_description: description,
     };
 
     try {
-      await axios.put(API_URL, updatedData, { headers: { "Content-Type": "application/json" } });
+      await axios.put(API_URL, updatedData, {
+        headers: { "Content-Type": "application/json" },
+      });
       setSuccess("모집공고가 성공적으로 수정되었습니다.");
       setTimeout(() => navigate(`/clubinfo/${club_id}`), 2000); // 2초 후 동아리 정보 페이지로 이동
     } catch (err) {
@@ -86,7 +100,12 @@ function EditRecruitmentPage() {
             {success && <S.SuccessMessage>{success}</S.SuccessMessage>}
 
             <S.Label>제목</S.Label>
-            <S.Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <S.Input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
 
             <S.Label>모집 유형</S.Label>
             <S.Select value={type} onChange={(e) => setType(e.target.value)}>
@@ -95,23 +114,45 @@ function EditRecruitmentPage() {
             </S.Select>
 
             <S.Label>연락처 (선택 입력)</S.Label>
-            <S.Input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+            <S.Input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
 
             <S.Label>이메일 (선택 입력)</S.Label>
-            <S.Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <S.Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
             {type === "수시모집" && (
               <>
                 <S.Label>모집 시작일</S.Label>
-                <S.Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+                <S.Input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                />
 
                 <S.Label>모집 종료일</S.Label>
-                <S.Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+                <S.Input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
               </>
             )}
 
             <S.Label>모집 내용</S.Label>
-            <S.TextArea value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <S.TextArea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
 
             <S.SubmitButton type="submit">수정 완료</S.SubmitButton>
           </S.Form>
